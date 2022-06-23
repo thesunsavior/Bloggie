@@ -31,7 +31,11 @@ urlpatterns = [
     path('logout/',
          auth_views.LogoutView.as_view(template_name='users/logout.html'),
          name='logout'),
-    path('blog/', include('blog.urls'))
+    path('blog/', include('blog.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('register/fb/', user_views.fbReg, name='fb-register'),
+    path('register/gg/', user_views.ggReg, name='gg-register'),
+    path('check/', user_views.fbReg, name='redirect'),
 ]
 
 if settings.DEBUG:
