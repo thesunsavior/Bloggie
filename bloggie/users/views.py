@@ -1,4 +1,6 @@
+from distutils.log import info
 from pickle import TRUE
+from unicodedata import name
 from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -30,14 +32,13 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 
-def ggReg(request):
-    form = GoogleAuthForm
-    return render(request, 'socialaccount/gg-register.html', {'form': form})
+# def ggReg(request):
+#     form = GoogleAuthForm
+#     return render(request, 'socialaccount/gg-register.html', {'form': form})
 
-
-def fbReg(request):
-    form = FacebookAuthForm
-    return render(request, 'socialaccount/fb-register.html', {'form': form})
+# def fbReg(request):
+#     form = FacebookAuthForm
+#     return render(request, 'socialaccount/fb-register.html', {'form': form})
 
 
 def redirect_resolve(request):
@@ -48,9 +49,13 @@ def redirect_resolve(request):
         if (social_account.info == False):
             form = FacebookAuthForm(request.POST)
             if (form.is_valid()):
-                form.save()
-                social_account.update(info=True)
-                return redirect('home')
+                name = form.cleaned_data.get('name')
+                phoneNumber = form.cleaned_data.get('phoneNumber')
+
+                social_account.name = name
+                social_account.phoneNumber = phoneNumber
+                social_account.info = True
+                return redirect('blog-home')
 
             return render(request, 'socialaccount/fb-register.html',
                           {'form': form})
@@ -62,15 +67,20 @@ def redirect_resolve(request):
         if (social_account.info == False):
             form = GoogleAuthForm(request.POST)
             if (form.is_valid()):
-                form.save()
-                social_account.update(info=True)
-                return redirect('home')
+                name = form.cleaned_data.get('name')
+                occupation = form.cleaned_data.get('occupation')
+
+                social_account.name = name
+                social_account.occupation = occupation
+                social_account.info = True
+                social_account.save()
+                return redirect('blog-home')
 
             return render(request, 'socialaccount/gg-register.html',
                           {'form': form})
 
     #if none social login
-    return redirect('home')
+    return redirect('blog-home')
 
 
 @login_required

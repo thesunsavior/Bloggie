@@ -32,7 +32,7 @@ class ProfileUpdateForm(forms.ModelForm):
         fields = ['image']
 
 
-class FacebookAuthForm(SignupForm):
+class FacebookAuthForm(forms.ModelForm):
 
     name = forms.CharField(label="name")
     PhoneNumber = forms.CharField(label="phone number")
@@ -44,19 +44,8 @@ class FacebookAuthForm(SignupForm):
         model = FB_User
         fields = ['name', 'phoneNumber']
 
-    def save(self, request):
 
-        # Ensure you call the parent class's save.
-        # .save() returns a User object.
-        user = super(FacebookAuthForm, self).save(request)
-
-        # Add your own processing here.
-
-        # You must return the original result.
-        return user
-
-
-class GoogleAuthForm(SignupForm):
+class GoogleAuthForm(forms.ModelForm):
     role = (
         ("Student", "Student"),
         ("Teacher", "Teacher"),
@@ -72,14 +61,3 @@ class GoogleAuthForm(SignupForm):
     class Meta:
         model = GG_User
         fields = ['name', 'occupation']
-
-    def save(self, request):
-
-        # Ensure you call the parent class's save.
-        # .save() returns a User object.
-        user = super(GoogleAuthForm, self).save(request)
-
-        # Add your own processing here.
-
-        # You must return the original result.
-        return user

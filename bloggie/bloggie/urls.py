@@ -33,9 +33,7 @@ urlpatterns = [
          name='logout'),
     path('blog/', include('blog.urls')),
     path('accounts/', include('allauth.urls')),
-    path('register/fb/', user_views.fbReg, name='fb-register'),
-    path('register/gg/', user_views.ggReg, name='gg-register'),
-    path('check/', user_views.fbReg, name='redirect'),
+    path('check/', user_views.redirect_resolve, name='redirect'),
 ]
 
 if settings.DEBUG:
