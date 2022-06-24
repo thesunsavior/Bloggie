@@ -35,7 +35,6 @@ class ProfileUpdateForm(forms.ModelForm):
 class FacebookAuthForm(forms.ModelForm):
 
     name = forms.CharField(label="name")
-    PhoneNumber = forms.CharField(label="phone number")
 
     # def __init__(self, sociallogin=None, **kwargs):
     #     super(FacebookAuthForm, self).__init__(**kwargs)

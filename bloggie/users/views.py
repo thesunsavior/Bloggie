@@ -7,6 +7,7 @@ from django.contrib.auth.forms import UserCreationForm
 from .models import FB_User, GG_User
 from .form import UserRegisterForm, UserUpdateForm, ProfileUpdateForm, FacebookAuthForm, GoogleAuthForm
 from django.contrib.auth.decorators import login_required
+from blog.models import Post
 
 
 def sign_in_processor(request):
@@ -32,16 +33,10 @@ def register(request):
     return render(request, 'users/register.html', {'form': form})
 
 
-# def ggReg(request):
-#     form = GoogleAuthForm
-#     return render(request, 'socialaccount/gg-register.html', {'form': form})
-
-# def fbReg(request):
-#     form = FacebookAuthForm
-#     return render(request, 'socialaccount/fb-register.html', {'form': form})
-
-
 def redirect_resolve(request):
+    if not request.user.is_authenticated:
+        return redirect('blog-home')
+
     # if facebook
     social_account = FB_User.objects.filter(user=request.user).first()
     print(social_account)
@@ -86,6 +81,8 @@ def redirect_resolve(request):
 @login_required
 def profile(request):
 
+    posts = Post.objects.filter(author=request.user)
+
     if request.method == 'POST':
         u_form = UserUpdateForm(request.POST, instance=request.user)
         p_form = ProfileUpdateForm(request.POST,
@@ -100,6 +97,6 @@ def profile(request):
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
 
-    context = {'u_form': u_form, 'p_form': p_form}
+    context = {'u_form': u_form, 'p_form': p_form, 'posts': posts}
 
     return render(request, 'users/profile.html', context)

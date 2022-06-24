@@ -20,6 +20,66 @@
         </div>
         <h2 class="article-title">{{ object.title }}</h2>
         <p class="article-content">{{ object.content }}</p>
+
+        <hr>
+        {% if post.likes.all.count > 2 %}
+        <a href="" data-toggle="modal" data-target="#likePeople" id="ThemIdDeQuery">aaaaaa</a>
+        {% else %}
+        {% if post.likes.all.count == 2 %}
+        <a href="" data-toggle="modal" data-target="#likePeople">{{post.likes.all.0}} and
+            {{post.likes.all.1}} like this</a>
+        {% else %}
+        {% if post.likes.all.count == 1 %}
+        <a href="" data-toggle="modal" data-target="#likePeople">{{post.likes.all.first}}
+            likes this</a>
+        {%endif%}
+
+        {% endif %}
+        {% endif %}
+        <form method="POST" action="{% url 'like' post.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{request.path}}">
+            <button style="background-color:transparent; border:none; box-shadow:none;" type="submit">
+                <i class="fa-solid fa-thumbs-up"> {{post.likes.all.count}}</i>
+            </button>
+        </form>
     </div>
 </article>
+
+<!-- Modal -->
+<div class="modal fade" id="likePeople" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">People who liked this</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {% for likePeople in post.likes.all %}
+                <div class="row justify-content-center mt-3">
+
+                    <a class="mr-2" href="#">{{ likePeople }}</a>
+
+                </div>
+
+                {%endfor%}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var t = document.querySelector("#ThemIdDeQuery")
+    console.log(t.innerHTML)
+    t.innerHTML = "{{ post.likes.all.count}}"
+    var likeLeft = t.innerHTML
+    t.innerHTML = `{{post.likes.all.0}}, {{post.likes.all.1}} and ${Number(likeLeft) - 2} other people like this`
+</script>
+
 {% endblock content %}

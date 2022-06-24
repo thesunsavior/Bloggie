@@ -5,14 +5,14 @@
     <form method="POST">
         {% csrf_token %}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Provide more info</legend>
-            {{form.as_p }}
+            <legend class="border-bottom mb-4">Blog post</legend>
+            {{form | crispy}}
         </fieldset>
 
         <div class="form-group">
-            <button class="btn btn-outline-info" type="submit">Submit</button>
+            <button class="btn btn-outline-info" type="submit">post</button>
         </div>
-
     </form>
 </div>
 {% endblock content %}
+<!-- add comment -->
